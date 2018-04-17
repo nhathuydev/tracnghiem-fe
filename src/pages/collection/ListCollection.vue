@@ -5,10 +5,10 @@
       <div class="table-toolbar">
         <div class="row">
           <div class="col-md-6">
-            <router-link :to="{name: 'CollectionAdd'}" id="sample_editable_1_new" class="btn sbold green">
+            <button :to="{name: 'CollectionAdd'}" id="sample_editable_1_new" class="btn sbold green" @click="navigateToCollectionAdd()" v-shortkey="['a']" @shortkey="navigateToCollectionAdd()">
               <i class="fa fa-plus"></i>
-            </router-link>
-            <button class="btn sbold blue" @click="getCollection()">
+            </button>
+            <button class="btn sbold blue" @click="getCollection()" v-shortkey="['r']" @shortkey="getCollection()">
               <i class="fa fa-refresh"></i>
             </button>
           </div>
@@ -63,7 +63,7 @@
                   <!-- <button type="button" class="btn red" @click="deleteCollection(item.id)">
                     <i class="fa fa-trash"></i>
                   </button> -->
-                  <button type="button" class="btn blue" @click="publishCollection({ids: [item.id], publish: !item.isPublish})">
+                  <button type="button" class="btn blue" @click="confirmPulishCollection({ids: [item.id], publish: !item.isPublish})">
                     <i :class="[{fa: true}, !item.isPublish ? 'fa fa-unlock' : 'fa fa-lock']"></i>
                   </button>
                 </div>
@@ -93,7 +93,8 @@
                 </a>
               </li>
               <li v-for="n in collections.last_page"  :class="[collections.current_page === n ? 'active' : '']">
-                <a @click.prevent="updatePageCollection(n)">{{n}}</a>
+                <a v-if="(collections.current_page - 3 < n && collections.current_page + 3 > n) || n === 1 || n === 2 ||
+                n === collections.last_page || n === (collections.last_page - 1)" @click.prevent="updatePageCollection(n)">{{n}}</a>
               </li>
               <li class="next">
                 <a @click="collections.current_page < collections.last_page && updatePageCollection(collections.current_page+1)"  title="Next">
@@ -128,9 +129,9 @@
       }
     },
     created: function () {
-      if (this.collections.current_page < 0) {
-        this.updatePageCollection(1)
-      }
+      // if (this.collections.current_page < 0) {
+      this.updatePageCollection(1)
+      // }
     },
     computed: mapGetters([
       'collections'
@@ -145,6 +146,14 @@
       ]),
       onChangeSize (event) {
         this.updateSizeCollection(event.srcElement.value)
+      },
+      navigateToCollectionAdd () {
+        this.$router.push({name: 'CollectionAdd'})
+      },
+      confirmPulishCollection (payload) {
+        if (confirm('Xác nhận thao tác')) {
+          this.publishCollection(payload)
+        }
       }
     }
   }

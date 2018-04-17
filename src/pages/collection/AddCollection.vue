@@ -33,7 +33,7 @@
         </div>
 
         <div :class="{'form-group': true, 'has-error': errors.has('time')}">
-          <label class="control-label">Duration (seconds)</label>
+          <label class="control-label">Duration (minutes)</label>
           <div class="input-icon right">
             <i v-if="errors.has('time')" class="fa fa-exclamation tooltips" data-original-title="please enter duration" data-container="body"></i>
             <input
@@ -43,6 +43,19 @@
               type="number"
               class="form-control"
               placeholder="Enter collection's duration">
+          </div>
+        </div>
+
+        <div :class="{'form-group': true, 'has-error': errors.has('point_ladder')}">
+          <label class="control-label">Point ladder</label>
+          <div class="input-icon right">
+            <i v-if="errors.has('point_ladder')" class="fa fa-exclamation tooltips" data-original-title="please enter duration" data-container="body"></i>
+            <input
+              v-model="point_ladder"
+              name="point_ladder"
+              type="number"
+              class="form-control"
+              placeholder="Enter collection's point ladder">
           </div>
         </div>
 
@@ -93,7 +106,8 @@
         image: null,
         tags: [],
         tag_options: [],
-        tags_selected: []
+        tags_selected: [],
+        point_ladder: 10
       }
     },
     watch: {
@@ -131,10 +145,11 @@
         createCollection({
           name: this.name,
           description: this.description,
-          time: this.time,
+          time: this.time * 60,
           image: this.image,
           tags: this.tags,
-          answers: this.answer_ids
+          answers: this.answer_ids,
+          point_ladder: this.point_ladder
         }).then(response => {
           const {data: {id}} = response
           this.$router.push({name: 'CollectionDetail', params: {id}})

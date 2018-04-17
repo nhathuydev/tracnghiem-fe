@@ -7,6 +7,7 @@ import VeeValidate from 'vee-validate'
 import Notification from 'vue-notification'
 import VueHead from 'vue-head'
 import vSelect from 'vue-select'
+import ShortKey from 'vue-shortkey'
 import Multiselect from 'vue-multiselect'
 import store from './store'
 import router from './router'
@@ -17,6 +18,7 @@ Vue.use(Vuex)
 Vue.use(VueHead)
 Vue.use(VeeValidate)
 Vue.use(Notification)
+Vue.use(ShortKey, { prevent: ['input', 'textarea'] })
 Vue.component('v-select', vSelect)
 Vue.component('multiselect', Multiselect)
 Vue.component('Pagebar', Pagebar)

@@ -86,6 +86,9 @@ export function publishCollection (payload) {
 export function createQuestionOfCollection (payload) {
   return fetcher(METHOD.POST, API.COLLECTION_CREATE_QUESTION, payload, MESSAGE.CREATE_SUCCESS)
 }
+export function removeQuestionOfCollection (payload) {
+  return fetcher(METHOD.POST, API.COLLECTION_REMOVE_QUESTION, payload, MESSAGE.UPDATE_SUCCESS)
+}
 
 // question
 export function createQuestion (payload) {

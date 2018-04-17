@@ -7,6 +7,7 @@ export default {
   COLLECTION: 'collection',
   COLLECTION_PUBLISH: 'collection/publish',
   COLLECTION_CREATE_QUESTION: 'collection/question-create',
+  COLLECTION_REMOVE_QUESTION: 'collection/question-attach',
   TAG: 'tag',
   ANSWER: 'answer',
   DASHBOARD: 'report/all'

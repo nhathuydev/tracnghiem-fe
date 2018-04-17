@@ -31,7 +31,7 @@
         </div>
 
         <div :class="{'form-group': true, 'has-error': errors.has('time')}">
-          <label class="control-label">Duration (seconds)</label>
+          <label class="control-label">Duration (minutes)</label>
           <div class="input-icon right">
             <i v-if="errors.has('time')" class="fa fa-exclamation tooltips" data-original-title="please enter duration" data-container="body"></i>
             <input
@@ -41,6 +41,33 @@
               type="number"
               class="form-control"
               placeholder="Enter collection's duration">
+          </div>
+        </div>
+
+        <div :class="{'form-group': true, 'has-error': errors.has('point_ladder')}">
+          <label class="control-label">Point ladder</label>
+          <div class="input-icon right">
+            <i v-if="errors.has('point_ladder')" class="fa fa-exclamation tooltips" data-original-title="please enter point ladder" data-container="body"></i>
+            <input
+              v-model="point_ladder"
+              name="point_ladder"
+              type="number"
+              class="form-control"
+              placeholder="Enter collection's point ladder">
+          </div>
+        </div>
+
+        <div :class="{'form-group': true, 'has-error': errors.has('random_question_count')}">
+          <label class="control-label">Number of questions</label>
+          <div class="input-icon right">
+            <i v-if="errors.has('random_question_count')" class="fa fa-exclamation tooltips" data-original-title="please enter a number" data-container="body"></i>
+            <input
+              v-model="random_question_count"
+              name="random_question_count"
+              type="number"
+              class="form-control"
+              placeholder="Enter collection's number of questions"
+            >
           </div>
         </div>
 
@@ -73,7 +100,9 @@ export default {
       description: null,
       time: null,
       image: null,
-      initImage: null
+      initImage: null,
+      point_ladder: null,
+      random_question_count: null
     }
   },
   created () {
@@ -82,7 +111,9 @@ export default {
       const d = data.data
       this.name = d.name
       this.description = d.description
-      this.time = d.time
+      this.time = d.time / 60
+      this.point_ladder = d.point_ladder
+      this.random_question_count = d.random_question_count
       this.image = d.image
       this.initImage = d.image
     })
@@ -104,9 +135,12 @@ export default {
     },
     submit: function () {
       updateCollection({
-        title: this.title,
+        id: this.$route.params.id,
+        name: this.name,
         description: this.description,
-        time: this.time,
+        random_question_count: this.random_question_count,
+        point_ladder: this.point_ladder,
+        time: this.time * 60,
         image: this.image === this.initImage ? null : this.image
       })
     },

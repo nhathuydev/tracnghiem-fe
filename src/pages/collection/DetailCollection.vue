@@ -11,16 +11,16 @@
           <button @click="$router.go(-1)" class="btn btn-circle btn-icon-only btn-default">
             <i class="fa fa-arrow-left"></i>
           </button>
-          <router-link :to="{name: 'CollectionEdit', id: collection.id}" class="btn btn-circle btn-icon-only btn-default">
+          <button class="btn btn-circle btn-icon-only btn-default" v-shortkey="['e']" @shortkey="navigateToCollectionEdit(collection.id)" @click="navigateToCollectionEdit(collection.id)">
             <i class="fa fa-edit"></i>
-          </router-link>
-          <router-link :to="{name: 'CollectionList'}" class="btn btn-circle btn-icon-only btn-default">
+          </button>
+          <button class="btn btn-circle btn-icon-only btn-default" v-shortkey="['a']" @shortkey="navigateToCollectionList">
             <i class="fa fa-list-alt"></i>
-          </router-link>
-          <button @click="tooglePublish" class="btn btn-circle btn-icon-only btn-default">
+          </button>
+          <button @click="tooglePublish" class="btn btn-circle btn-icon-only btn-default" v-shortkey="['l']" @shortkey="tooglePublish">
             <i :class="[{'fa': true}, !collection.isPublish ? 'fa-lock' : 'fa fa-unlock']"></i>
           </button>
-          <button @click="fetchData" class="btn btn-circle btn-icon-only btn-default">
+          <button @click="fetchData" class="btn btn-circle btn-icon-only btn-default" v-shortkey="['r']" @shortkey="fetchData">
             <i :class="['fa fa-refresh', loading ? 'fa-spin' : '']"></i>
           </button>
         </div>
@@ -59,6 +59,12 @@
                   </li>
                   <li>
                     <strong>Status:</strong> <span :class="[{'label': true} ,collection.isPublish ? 'badge badge-info' : ' badge badge-danger']">{{collection.isPublish ? 'Publish' : 'Draft'}}</span>
+                  </li>
+                  <li>
+                    <strong>Number of questions: </strong> {{collection.random_question_count || 'all'}}
+                  </li>
+                  <li>
+                    <strong>Point ladder: </strong> {{collection.point_ladder}}
                   </li>
                   <li v-if="collection.category">
                     <strong>Category:</strong> {{collection.category.name}}
@@ -106,15 +112,15 @@
                         </ul>
                         <div class="task-footer bg-grey">
                           <div class="row">
+                            <!--<div class="col-xs-6">-->
+                              <!--<router-link :to="{name: 'QuestionDetail', id: 40}" class="task-add">-->
+                                <!--<i class="fa fa-eye"></i>-->
+                              <!--</router-link>-->
+                            <!--</div>-->
                             <div class="col-xs-6">
-                              <router-link :to="{name: 'QuestionDetail', id: 40}" class="task-add">
-                                <i class="fa fa-eye"></i>
-                              </router-link>
-                            </div>
-                            <div class="col-xs-6">
-                              <a class="task-trash" href="javascript:;">
+                              <button class="task-trash" @click="onRemoveQuestionOfCollection(question.id)">
                                 <i class="fa fa-trash"></i>
-                              </a>
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -160,7 +166,8 @@
 
                 <div :class="{'form-group': true, 'has-error': false}">
                   <label class="control-label">Answers</label>
-                  <button @click.prevent="addAnswerCapacity" class="btn btn-sm btn-circle pull-right"><i class="fa fa-plus"></i></button>
+                  <button @click.prevent="addAnswerCapacity" class="btn btn-sm btn-circle pull-right" v-shortkey="['d']" @shortkey="addAnswerCapacity()">
+                    <i class="fa fa-plus"></i></button>
 
                   <div
                     v-for="(ans, index) in answers_selected"
@@ -249,7 +256,7 @@
   </div>
 </template>
 <script>
-import { detailCollection, createQuestionOfCollection, searchTag, searchAnswer } from '@/api'
+import { detailCollection, createQuestionOfCollection, searchTag, searchAnswer, removeQuestionOfCollection } from '@/api'
 import {mapActions} from 'vuex'
 
 export default {
@@ -358,6 +365,27 @@ export default {
       createQuestionOfCollection({
         collection_id: this.collection.id,
         ...this.new_question
+      }).then(data => {
+        this.fetchData()
+        this.new_question = {
+          content: null,
+          explain: null,
+          tags: [],
+          answers: [],
+          image: null,
+          multiChoice: false
+        }
+        this.answers_selected = [
+          {
+            content: '',
+            isCorrect: false
+          },
+          {
+            content: '',
+            isCorrect: false
+          }
+        ]
+        this.tags_selected = []
       })
     },
     addTag (newTag) {
@@ -387,10 +415,12 @@ export default {
       })
     },
     tooglePublish () {
-      this.publishCollection({ids: [this.collection.id], publish: !this.collection.isPublish})
-        .then(() => {
-          this.collection.isPublish = !this.collection.isPublish
-        })
+      if (confirm('Xác nhận thao tác')) {
+        this.publishCollection({ids: [this.collection.id], publish: !this.collection.isPublish})
+          .then(() => {
+            this.collection.isPublish = !this.collection.isPublish
+          })
+      }
     },
     removeAnswerItem (aId) {
       if (this.answers_selected.length <= 2) {
@@ -413,6 +443,21 @@ export default {
         }
       }
       this.answers_selected[aId].isCorrect = !this.answers_selected[aId].isCorrect
+    },
+    navigateToCollectionList () {
+      this.$router.push({name: 'CollectionList'})
+    },
+    navigateToCollectionEdit (id) {
+      this.$router.push({name: 'CollectionEdit', params: {id}})
+    },
+    onRemoveQuestionOfCollection (qid) {
+      removeQuestionOfCollection({
+        collection_id: this.$route.params.id,
+        attach: 0,
+        question_ids: [qid]
+      }).then(() => {
+        this.fetchData()
+      })
     }
   }
 }

@@ -5,10 +5,10 @@
       <div class="table-toolbar">
         <div class="row">
           <div class="col-md-6">
-            <router-link :to="{name: 'TagAdd'}" id="sample_editable_1_new" class="btn sbold green">
+            <button id="sample_editable_1_new" class="btn sbold green" v-shortkey="['a']" @shortkey="navigateToTagAdd()" @click="navigateToTagAdd()">
               <i class="fa fa-plus"></i>
-            </router-link>
-            <button class="btn sbold blue" @click="getTag()">
+            </button>
+            <button class="btn sbold blue" @click="getTag()" v-shortkey="['r']" @shortkey="getTag()">
               <i class="fa fa-refresh"></i>
             </button>
           </div>
@@ -126,6 +126,9 @@
       ]),
       onChangeSize (event) {
         this.updateSizeTag(event.srcElement.value)
+      },
+      navigateToTagAdd () {
+        this.$router.push({name: 'TagAdd'})
       }
     }
   }
