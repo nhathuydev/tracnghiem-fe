@@ -1,4 +1,4 @@
-import { getAccount } from '@/api'
+import { getAccount, banUser } from '@/api'
 import * as types from './../mutation-types'
 
 // init state
@@ -40,6 +40,15 @@ const actions = {
   updatePageAccount ({ commit, dispatch }, page) {
     commit(types.ACCOUNT_UPDATE_PAGE, page)
     dispatch('getAccount')
+  },
+  banAccount ({ commit }, payload) {
+    banUser(payload)
+      .then((response) => {
+        commit(types.ACCOUNT_BAN, payload)
+      })
+    .catch(error => {
+      console.log(error)
+    })
   }
 }
 // mutation
@@ -52,6 +61,9 @@ const mutations = {
   },
   [types.ACCOUNT_UPDATE_PAGE] (state, page) {
     state.data.current_page = page
+  },
+  [types.ACCOUNT_BAN] (state, payload) {
+    state.data.data[state.data.data.findIndex(item => item.id === payload.uid)].isBan = payload.isBan
   }
 }
 export default {

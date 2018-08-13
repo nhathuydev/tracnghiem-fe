@@ -5,6 +5,8 @@ import {LayoutMain, LayoutAuth} from '@/pages/layout'
 import Login from '@/pages/auth/Login'
 import Lockscreen from '@/pages/auth/Lockscreen'
 import Dashboard from '@/pages/Dashboard'
+import PushNotification from '@/pages/PushNotification'
+import SendPoint from '@/pages/SendPoint'
 import Profile from '@/pages/Profile'
 import Toolkit from '@/pages/Toolkit'
 import Notfound from '@/pages/Notfound'
@@ -12,7 +14,7 @@ import { AddCollection, ListCollection, EditCollection, DetailCollection } from 
 import { AddQuestion, ListQuestion, EditQuestion, DetailQuestion } from '@/pages/question'
 import { AddTag, ListTag, EditTag, DetailTag } from '@/pages/tag'
 import { AddAnswer, ListAnswer, EditAnswer, DetailAnswer } from '@/pages/answer'
-import { ListUser } from '@/pages/user'
+import { ListUser, AddUser, DetailUser } from '@/pages/user'
 
 Vue.use(Router)
 
@@ -69,6 +71,22 @@ const router = new Router({
           path: '/toolkit',
           name: 'Toolkit',
           component: Toolkit,
+          meta: {
+            Auth: true
+          }
+        },
+        {
+          path: '/push-notification',
+          name: 'PushNotification',
+          component: PushNotification,
+          meta: {
+            Auth: true
+          }
+        },
+        {
+          path: '/send-coin',
+          name: 'SendPoint',
+          component: SendPoint,
           meta: {
             Auth: true
           }
@@ -206,6 +224,22 @@ const router = new Router({
           path: '/user',
           name: 'UserList',
           component: ListUser,
+          meta: {
+            Auth: true
+          }
+        },
+        {
+          path: '/user/add',
+          name: 'UserAdd',
+          component: AddUser,
+          meta: {
+            Auth: true
+          }
+        },
+        {
+          path: '/user/:id',
+          name: 'UserDetail',
+          component: DetailUser,
           meta: {
             Auth: true
           }

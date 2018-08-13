@@ -1,7 +1,8 @@
 import axios from 'axios'
 import store from '../store'
-import {API, baseUrl, MESSAGE} from '@/constants'
+import {API, baseUrl, MESSAGE, STATUS_CODE} from '@/constants'
 import {errorApiHandler, successApiHandler} from '@/helpers'
+
 const api = axios.create({
   baseURL: baseUrl,
   headers: {
@@ -50,8 +51,11 @@ function fetcher (method, inputEndpoint, body, successString = null) {
         resolve(response.data)
       })
       .catch(error => {
-        console.log(error.response)
-        errorApiHandler(error.response)
+        if (error.status === STATUS_CODE.HTTP_UNAUTHORIZED) {
+          global.router.push({name: 'Login'})
+        } else {
+          errorApiHandler(error.response)
+        }
         reject(error.response)
       })
   })
@@ -60,8 +64,19 @@ function fetcher (method, inputEndpoint, body, successString = null) {
 export function login (email, password) {
   return fetcher(METHOD.POST, API.LOGIN, {email: email, password: password})
 }
+
+// user
 export function detailUser () {
   return fetcher(METHOD.GET, API.USER)
+}
+export function detailUserById (id) {
+  return fetcher(METHOD.GET, 'users/', [id])
+}
+export function createUser (payload) {
+  return fetcher(METHOD.POST, 'users', payload, MESSAGE.CREATE_SUCCESS)
+}
+export function banUser (payload) {
+  return fetcher(METHOD.POST, 'users/ban', payload, MESSAGE.UPDATE_SUCCESS)
 }
 
 // collection
@@ -73,6 +88,9 @@ export function updateCollection (payload) {
 }
 export function getCollection (payload) {
   return fetcher(METHOD.GET, API.COLLECTION, payload)
+}
+export function searchCollection (payload) {
+  return fetcher(METHOD.GET, API.COLLECTION + '/search', payload)
 }
 export function deleteCollection (ids) {
   return fetcher(METHOD.DELTE, API.COLLECTION + '/', ids)
@@ -125,6 +143,9 @@ export function searchTag (payload) {
 export function getAccount (payload) {
   return fetcher(METHOD.GET, API.USERS, payload)
 }
+export function searchAccount (payload) {
+  return fetcher(METHOD.GET, 'users/search', payload)
+}
 
 // category
 export function createAnswer (payload) {
@@ -146,4 +167,25 @@ export function detailAnswer (id) {
 // dashboard
 export function getDashboard () {
   return fetcher(METHOD.GET, API.DASHBOARD)
+}
+
+// Notification
+export function pushNotification (payload) {
+  return fetcher(METHOD.POST, 'notification', payload, MESSAGE.PUSH_NOTIF_SUCCESS)
+}
+
+export function sendPoint (payload) {
+  return fetcher(METHOD.POST, 'point/send', payload, MESSAGE.SEND_POINT_SUCCESS)
+}
+
+export function getFeature (payload) {
+  return fetcher(METHOD.GET, 'feature-collection', payload)
+}
+
+export function removeFeature (payload) {
+  return fetcher(METHOD.POST, 'feature-collection/remove', payload)
+}
+
+export function addFeature (payload) {
+  return fetcher(METHOD.POST, 'feature-collection/add', payload)
 }

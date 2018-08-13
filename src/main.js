@@ -31,6 +31,7 @@ Vue.config.errorHandler = function (err, vm, info) {
   console.log(err, info)
 }
 Vue.prototype.moment = moment
+global.router = router
 global.token = JSON.parse(window.localStorage.getItem('user'))
 /* eslint-disable no-new */
 global.vm = new Vue({

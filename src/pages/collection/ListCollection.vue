@@ -45,7 +45,7 @@
               <td>{{item.name}}</td>
               <td>{{item.description}}</td>
               <td>{{moment.duration(item.time, 'seconds').humanize()}}</td>
-              <td>{{item.questions_count}}</td>
+              <td>{{item.random_question_count > 0 && item.random_question_count<=item.questions_count ? `${item.random_question_count}/${item.questions_count}` : item.questions_count}}</td>
               <td>
                 <span :class="['label label-sm label-mini', item.isPublish ? 'label-success' : 'label-warning']"> {{item.isPublish ? 'Published' : 'Draft'}} </span>
               </td>

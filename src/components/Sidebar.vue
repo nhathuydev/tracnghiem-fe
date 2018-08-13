@@ -104,12 +104,29 @@
             <span class="title">User</span>
           </router-link>
         </li>
-        <li class="nav-item">
-          <router-link :to="{name: 'Toolkit'}" class="nav-link">
+
+        <li class="nav-item ">
+          <a class="nav-link nav-toggle">
             <i class="fa fa-magic"></i>
             <span class="title">Toolkit</span>
-          </router-link>
+            <span class="arrow"></span>
+          </a>
+          <ul class="sub-menu">
+            <li class="nav-item">
+              <router-link :to="{name: 'PushNotification'}" class="nav-link">
+                <i class="fa fa-bell"></i>
+                <span class="title">Push Notification</span>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link :to="{name: 'SendPoint'}" class="nav-link">
+                <i class="fa fa-bell"></i>
+                <span class="title">Send Coin</span>
+              </router-link>
+            </li>
+          </ul>
         </li>
+
         <li class="nav-item">
           <router-link :to="{name: 'Dashboard'}" class="nav-link">
             <i class="fa fa-cogs"></i>

@@ -32,7 +32,7 @@
                 <th> # </th>
                 <th style="text-align: center"> Content </th>
                 <th style="text-align: center"> Answers </th>
-                <th style="text-align: center"> Tags </th>
+                <th style="text-align: center"> Questions </th>
                 <th style="text-align: center"> Image </th>
                 <th style="text-align: center"> Actions </th>
               </tr>
@@ -43,7 +43,7 @@
               <td>{{item.content}}</td>
               <td>{{item.answers_count}}</td>
               <td>
-                <router-link :key="tag.id" :to="{name: 'TagDetail', params: {id: tag.id}}" v-for="tag in item.tags" class="btn btn-sm badge badge-roundless">
+                <router-link :key="tag.id" :to="{name: 'QuestionDetail', params: {id: tag.id}}" v-for="tag in item.questions" class="btn btn-sm badge badge-roundless">
                   <span>
                     {{tag.name}}
                   </span>
@@ -74,8 +74,8 @@
             Showing {{questions.from}} to {{questions.to}} of {{questions.total}} records
           </div>
         </div>
-        <div class="col-md-7 col-sm-7">
-          <div v-if="questions.total / parseInt(questions.per_page, 10) > 1" class="dataTables_paginate paging_bootstrap_full_number pull-right" id="sample_1_paginate">
+        <div class="col-md-7 col-sm-7" v-if="questions.total / parseInt(questions.per_page, 10) > 1">
+          <div class="dataTables_paginate paging_bootstrap_full_number pull-right" id="sample_1_paginate">
             <ul class="pagination" style="visibility: visible;">
               <li class="prev">
                 <a @click="questions.current_page !== 1 && updatePageQuestion(1)"title="First">
@@ -88,7 +88,8 @@
                 </a>
               </li>
               <li v-for="n in questions.last_page"  :class="[questions.current_page === n ? 'active' : '']">
-                <a @click.prevent="updatePageQuestion(n)">{{n}}</a>
+                <a v-if="(questions.current_page - 3 < n && questions.current_page + 3 > n) || n === 1 || n === 2 ||
+                n === questions.last_page || n === (questions.last_page - 1)" @click.prevent="updatePageQuestion(n)">{{n}}</a>
               </li>
               <li class="next">
                 <a @click="questions.current_page < questions.last_page && updatePageQuestion(questions.current_page+1)"  title="Next">

@@ -12,6 +12,7 @@ const state = {
 const getters = {
   isLogged: state => state.info !== null,
   token: state => state.info && state.info.token,
+  uid: state => state.info && state.info.id,
   info: state => state.info
 }
 

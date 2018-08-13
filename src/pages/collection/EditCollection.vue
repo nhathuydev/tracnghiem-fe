@@ -44,6 +44,34 @@
           </div>
         </div>
 
+        <div :class="{'form-group': true, 'has-error': errors.has('point')}">
+          <label class="control-label">Coin</label>
+          <div class="input-icon right">
+            <i v-if="errors.has('point')" class="fa fa-exclamation tooltips" data-original-title="please enter coin" data-container="body"></i>
+            <input
+              v-model="point"
+              name="point"
+              v-validate="'required'"
+              type="number"
+              class="form-control"
+              placeholder="Enter collection's coin">
+          </div>
+        </div>
+
+        <div :class="{'form-group': true, 'has-error': errors.has('turn')}">
+          <label class="control-label">Turn</label>
+          <div class="input-icon right">
+            <i v-if="errors.has('turn')" class="fa fa-exclamation tooltips" data-original-title="please enter turn" data-container="body"></i>
+            <input
+              v-model="turn"
+              name="turn"
+              v-validate="'required'"
+              type="number"
+              class="form-control"
+              placeholder="Enter collection's turn">
+          </div>
+        </div>
+
         <div :class="{'form-group': true, 'has-error': errors.has('point_ladder')}">
           <label class="control-label">Point ladder</label>
           <div class="input-icon right">
@@ -100,6 +128,8 @@ export default {
       description: null,
       time: null,
       image: null,
+      point: 0,
+      turn: 0,
       initImage: null,
       point_ladder: null,
       random_question_count: null
@@ -115,6 +145,8 @@ export default {
       this.point_ladder = d.point_ladder
       this.random_question_count = d.random_question_count
       this.image = d.image
+      this.point = d.point
+      this.turn = d.turn
       this.initImage = d.image
     })
   },
@@ -141,6 +173,8 @@ export default {
         random_question_count: this.random_question_count,
         point_ladder: this.point_ladder,
         time: this.time * 60,
+        point: this.point,
+        turn: this.turn,
         image: this.image === this.initImage ? null : this.image
       })
     },

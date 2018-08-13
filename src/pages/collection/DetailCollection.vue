@@ -61,7 +61,14 @@
                     <strong>Status:</strong> <span :class="[{'label': true} ,collection.isPublish ? 'badge badge-info' : ' badge badge-danger']">{{collection.isPublish ? 'Publish' : 'Draft'}}</span>
                   </li>
                   <li>
-                    <strong>Number of questions: </strong> {{collection.random_question_count || 'all'}}
+                    <!--<strong>Number of questions: </strong> {{collection.random_question_count || 'all'}}-->
+                    <strong>Number of questions: </strong> {{collection.random_question_count > 0 && collection.random_question_count<=Object.keys(collection.questions).length ? `${collection.random_question_count}/${Object.keys(collection.questions).length}` : Object.keys(collection.questions).length}}
+                  </li>
+                  <li>
+                    <strong>Coin: </strong> {{collection.point}}
+                  </li>
+                  <li>
+                    <strong>Turn: </strong> {{collection.turn}}
                   </li>
                   <li>
                     <strong>Point ladder: </strong> {{collection.point_ladder}}

@@ -6,7 +6,7 @@
       <div class="table-toolbar">
         <div class="row">
           <div class="col-md-6">
-            <router-link :to="{name: 'PostAdd'}" id="sample_editable_1_new" class="btn sbold green">
+            <router-link :to="{name: 'UserAdd'}" id="sample_editable_1_new" class="btn sbold green">
               <i class="fa fa-plus"></i>
             </router-link>
             <button class="btn sbold blue" @click="getAccount()">
@@ -27,25 +27,31 @@
       </div>
       <div class="dataTables_wrapper no-footer">
         <div class="table-scrollable table-responsive">
-          <table class="table table-hover">
+          <table class="table">
             <thead>
             <tr>
               <th> # </th>
               <th> Name </th>
+              <th> Email </th>
+              <th> Coin </th>
+              <th> Linked </th>
               <th class="text-right"></th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in accounts.data">
+            <tr v-for="item in accounts.data" :class="item.isBan ? 'bg-danger' : (item.isAdmin ? 'bg-info' : '')">
               <td>{{item.id}}</td>
               <td>{{item.name}}</td>
+              <td><a href="#">{{item.email}}</a></td>
+              <td>{{item.point}}</td>
+              <td>{{renderProviderText(item.providers)}}</td>
               <td class="text-right">
                 <div class="btn-group btn-group-solid">
-                  <router-link :to="{name: 'PostEdit', params: {id: item.id}}" type="button" class="btn green">
+                  <router-link :to="{name: 'UserDetail', params: {id: item.id}}" type="button" class="btn green">
                     <i class="fa fa-eye"></i>
                   </router-link>
-                  <button type="button" class="btn red" @click="deletePost(item.id)">
-                    <i class="fa fa-trash"></i>
+                  <button v-if="uid === 1" type="button" class="btn red" @click="confirmBanUser({uid: item.id, isBan: !item.isBan})">
+                    <i class="fa fa-ban"></i>
                   </button>
                 </div>
               </td>
@@ -115,16 +121,30 @@
       }
     },
     computed: mapGetters([
-      'accounts'
+      'accounts',
+      'uid'
     ]),
     methods: {
       ...mapActions([
         'getAccount',
         'updateSizeAccount',
-        'updatePageAccount'
+        'updatePageAccount',
+        'banAccount'
       ]),
       onChangeSize (event) {
         this.updateSizeAccount(event.srcElement.value)
+      },
+      renderProviderText: function (providers) {
+        let result = ''
+        for (var i = 0; i < providers.length; i++) {
+          result += `${providers[i].name}, `
+        }
+        return result.slice(0, -2)
+      },
+      confirmBanUser (payload) {
+        if (confirm('Xác nhận thao tác')) {
+          this.banAccount(payload)
+        }
       }
     }
   }

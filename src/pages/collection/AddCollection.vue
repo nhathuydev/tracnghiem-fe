@@ -59,6 +59,32 @@
           </div>
         </div>
 
+        <div :class="{'form-group': true, 'has-error': errors.has('point')}">
+          <label class="control-label">Coin</label>
+          <div class="input-icon right">
+            <i v-if="errors.has('point')" class="fa fa-exclamation tooltips" data-original-title="please enter coin" data-container="body"></i>
+            <input
+              v-model="point"
+              name="point"
+              type="number"
+              class="form-control"
+              placeholder="Enter collection's coin">
+          </div>
+        </div>
+
+        <div :class="{'form-group': true, 'has-error': errors.has('turn')}">
+          <label class="control-label">Turn</label>
+          <div class="input-icon right">
+            <i v-if="errors.has('turn')" class="fa fa-exclamation tooltips" data-original-title="please enter turn" data-container="body"></i>
+            <input
+              v-model="turn"
+              name="turn"
+              type="number"
+              class="form-control"
+              placeholder="Enter collection's turn">
+          </div>
+        </div>
+
         <div :class="{'form-group': true, 'has-error': false}">
           <label class="control-label">Tags</label>
           <multiselect
@@ -104,6 +130,8 @@
         description: null,
         time: null,
         image: null,
+        point: 0,
+        turn: 0,
         tags: [],
         tag_options: [],
         tags_selected: [],
@@ -147,6 +175,8 @@
           description: this.description,
           time: this.time * 60,
           image: this.image,
+          point: this.point,
+          turn: this.turn,
           tags: this.tags,
           answers: this.answer_ids,
           point_ladder: this.point_ladder
